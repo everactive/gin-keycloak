@@ -1,0 +1,38 @@
+version: '3'
+
+tasks:
+  precommit:
+    cmds:
+      - task: gofmt
+      - task: goimports
+      - task: lint
+      - task: test
+      - task: test-race
+  gofmt:
+    desc: Runs gofmt on every file in the project directory
+    cmds:
+      - find . -name "*.go" -exec gofmt -w {} \;
+  goimports:
+    desc: Runs goimports on every file in the project directory
+    cmds:
+      - find . -name "*.go" -exec goimports -w {} \;
+  lint:
+    desc: Run the golangci-lint on the repo
+    cmds:
+      - golangci-lint run
+  test:
+    desc: Run tests for the gateway controller
+    cmds:
+      - go test ./...
+  test-race:
+    desc: Run race detection tests
+    cmds:
+      - go test ./... -race
+  get-mockery:
+    desc: Gets the Mockery framework for generating mocks
+    cmds:
+      - go get github.com/vektra/mockery/.../
+  update-mocks:
+    desc: Updates the mocks that are generated with Mockery
+    cmds:
+      - mockery --all "$@"
